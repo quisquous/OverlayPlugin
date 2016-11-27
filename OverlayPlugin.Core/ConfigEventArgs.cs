@@ -71,6 +71,15 @@ namespace RainbowMage.OverlayPlugin
         }
     }
 
+    public class FocusDisabledChangedEventArgs : EventArgs
+    {
+        public bool NewFocusDisabled { get; private set; }
+        public FocusDisabledChangedEventArgs(bool focusDisabled)
+        {
+            this.NewFocusDisabled = focusDisabled;
+        }
+    }
+
     public class GlobalHotkeyEnabledChangedEventArgs : EventArgs
     {
         public bool NewGlobalHotkeyEnabled { get; private set; }

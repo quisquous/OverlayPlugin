@@ -22,6 +22,7 @@ namespace RainbowMage.OverlayPlugin
         private object surfaceBufferLocker = new object();
         private int maxFrameRate;
         private System.Threading.Timer zorderCorrector;
+        private bool focusDisabled;
         private bool terminated = false;
         private bool shiftKeyPressed = false;
         private bool altKeyPressed = false;
@@ -61,12 +62,13 @@ namespace RainbowMage.OverlayPlugin
 
         public bool Locked { get; set; }
 
-        public OverlayForm(string url, int maxFrameRate = 30)
+        public OverlayForm(string url, int maxFrameRate = 30, bool focusDisabled = true)
         {
             InitializeComponent();
             Renderer.Initialize();
 
             this.maxFrameRate = maxFrameRate;
+            this.focusDisabled = focusDisabled;
             this.Renderer = new Renderer();
             this.Renderer.Render += renderer_Render;
             this.MouseWheel += OverlayForm_MouseWheel;
@@ -92,9 +94,11 @@ namespace RainbowMage.OverlayPlugin
                 const int CP_NOCLOSE_BUTTON = 0x200;
                 const int WS_EX_NOACTIVATE = 0x08000000;
 
+                int noActivate = (this.focusDisabled) ? WS_EX_NOACTIVATE : 0;
+
                 var cp = base.CreateParams;
-                cp.ExStyle = cp.ExStyle | WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_NOACTIVATE;
-                cp.ClassStyle = cp.ClassStyle | CP_NOCLOSE_BUTTON | WS_EX_NOACTIVATE;
+                cp.ExStyle = cp.ExStyle | WS_EX_TOPMOST | WS_EX_LAYERED | noActivate;
+                cp.ClassStyle = cp.ClassStyle | CP_NOCLOSE_BUTTON | noActivate;
 
                 return cp;
             }

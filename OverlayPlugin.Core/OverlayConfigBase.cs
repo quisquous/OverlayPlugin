@@ -20,6 +20,7 @@ namespace RainbowMage.OverlayPlugin
         public event EventHandler<ThruStateChangedEventArgs> ClickThruChanged;
         public event EventHandler<UrlChangedEventArgs> UrlChanged;
         public event EventHandler<MaxFrameRateChangedEventArgs> MaxFrameRateChanged;
+        public event EventHandler<FocusDisabledChangedEventArgs> FocusDisabledChanged;
         public event EventHandler<GlobalHotkeyEnabledChangedEventArgs> GlobalHotkeyEnabledChanged;
         public event EventHandler<GlobalHotkeyChangedEventArgs> GlobalHotkeyChanged;
         public event EventHandler<GlobalHotkeyChangedEventArgs> GlobalHotkeyModifiersChanged;
@@ -139,6 +140,27 @@ namespace RainbowMage.OverlayPlugin
             }
         }
 
+        private bool focusDisabled;
+        [XmlElement("FocusDisabled")]
+        public bool FocusDisabled
+        {
+            get
+            {
+                return this.focusDisabled;
+            }
+            set
+            {
+                if (this.focusDisabled != value)
+                {
+                    this.focusDisabled = value;
+                    if(FocusDisabledChanged != null)
+                    {
+                        FocusDisabledChanged(this, new FocusDisabledChangedEventArgs(this.focusDisabled));
+                    }
+                }
+            }
+        }
+
         private bool globalHotkeyEnabled;
         /// <summary>
         /// オーバーレイに設定されたグローバルホットキーによって表示切替を行うかどうかを取得または設定します。
@@ -212,6 +234,7 @@ namespace RainbowMage.OverlayPlugin
         }
 
         private bool isLocked;
+
         /// <summary>
         /// オーバーレイがマウスの入力を透過するかどうかを取得または設定します。
         /// </summary>
@@ -244,6 +267,7 @@ namespace RainbowMage.OverlayPlugin
             this.Size = new Size(300, 300);
             this.Url = "";
             this.MaxFrameRate = 30;
+            this.focusDisabled = true;
             this.globalHotkeyEnabled = false;
             this.GlobalHotkey = Keys.None;
             this.globalHotkeyModifiers = Keys.None;
