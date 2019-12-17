@@ -21,18 +21,18 @@ namespace RainbowMage.HtmlRenderer
 {
     public partial class OverlayForm : Form
     {
-        private DIBitmap surfaceBuffer;
-        private object surfaceBufferLocker = new object();
-        private System.Threading.Timer zorderCorrector;
-        private bool terminated = false;
-        private bool shiftKeyPressed = false;
-        private bool altKeyPressed = false;
-        private bool controlKeyPressed = false;
+        protected DIBitmap surfaceBuffer;
+        protected object surfaceBufferLocker = new object();
+        protected System.Threading.Timer zorderCorrector;
+        protected bool terminated = false;
+        protected bool shiftKeyPressed = false;
+        protected bool altKeyPressed = false;
+        protected bool controlKeyPressed = false;
 
-        private const int WS_EX_TOPMOST = 0x00000008;
-        private const int WS_EX_LAYERED = 0x00080000;
-        private const int CP_NOCLOSE_BUTTON = 0x200;
-        private const int WS_EX_NOACTIVATE = 0x08000000;
+        protected const int WS_EX_TOPMOST = 0x00000008;
+        protected const int WS_EX_LAYERED = 0x00080000;
+        protected const int CP_NOCLOSE_BUTTON = 0x200;
+        protected const int WS_EX_NOACTIVATE = 0x08000000;
 
         public Region DraggableRegion = null;
 
@@ -182,7 +182,7 @@ namespace RainbowMage.HtmlRenderer
             }
         }
 
-        private void UpdateLayeredWindowBitmap()
+        protected virtual void OnRenderFrame()
         {
             if (surfaceBuffer.IsDisposed || this.terminated) { return; }
 
@@ -301,7 +301,7 @@ namespace RainbowMage.HtmlRenderer
                     // TODO: DirtyRect に対応
                     surfaceBuffer.SetSurfaceData(buffer, (uint)(width * height * 4));
 
-                    UpdateLayeredWindowBitmap();
+                    this.OnRenderFrame();
                 }
                 catch
                 {

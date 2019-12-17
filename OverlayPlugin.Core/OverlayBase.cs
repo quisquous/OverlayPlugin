@@ -100,7 +100,8 @@ namespace RainbowMage.OverlayPlugin
             try
             {
                 // FIXME: is this *really* correct way to get version of current assembly?
-                this.Overlay = new OverlayForm(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                // TODO: need to pass in the "is this a control" or not.  For now, just hardcode.
+                this.Overlay = new OverlayFormControl(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                     this.Name, Config.Url, this.Config.MaxFrameRate, new OverlayApi(this));
 
                 UpdateHotKey();

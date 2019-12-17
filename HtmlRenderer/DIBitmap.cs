@@ -10,7 +10,7 @@ namespace RainbowMage.HtmlRenderer
     /// <summary>
     /// デバイス独立ビットマップを表現するクラス。
     /// </summary>
-    class DIBitmap : IDisposable
+    public class DIBitmap : IDisposable
     {
         /// <summary>
         /// ビットマップの幅を取得します。
