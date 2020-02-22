@@ -102,21 +102,23 @@ namespace RainbowMage.OverlayPlugin.EventSources
         private IntPtr aggroAddress = IntPtr.Zero;
 
         private const string charmapSignature = "574883EC??488B1D????????488BF233D2";
+        private const int charmapSignaturePointerOffset = -9;
         private const string targetSignature = "483935????????7520483935????????7517";
+        private const int targetSignaturePointerOffset = -6;
         private const string enmitySignature = "83f9ff7412448b048e8bd3488d0d";
 
         // Offsets from the signature to find the correct address.
         private const int charmapSignatureOffset = 0;
-        private const int targetSignatureOffset = 192;
+        private const int targetSignatureOffset = 0;
         private const int enmitySignatureOffset = -4648;
 
         // Offset from the enmityAddress to find various enmity data structures.
         private const int aggroEnmityOffset = 0x908;
 
         // Offsets from the targetAddress to find the correct target type.
-        private const int targetTargetOffset = -0x18;
-        private const int focusTargetOffset = 0x38;
-        private const int hoverTargetOffset = 0x20;
+        private const int targetTargetOffset = 0;
+        private const int focusTargetOffset = 0x78;
+        private const int hoverTargetOffset = 0x50;
 
         // Constants.
         private const uint emptyID = 0xE0000000;
@@ -176,7 +178,7 @@ namespace RainbowMage.OverlayPlugin.EventSources
             List<string> fail = new List<string>();
 
             /// CHARMAP
-            List<IntPtr> list = memory.SigScan(charmapSignature, 0, bRIP);
+            List<IntPtr> list = memory.SigScan(charmapSignature, charmapSignaturePointerOffset, bRIP);
             if (list != null && list.Count == 1)
             {
                 charmapAddress = list[0] + charmapSignatureOffset;
@@ -205,7 +207,7 @@ namespace RainbowMage.OverlayPlugin.EventSources
             }
 
             /// TARGET
-            list = memory.SigScan(targetSignature, 0, bRIP);
+            list = memory.SigScan(targetSignature, targetSignaturePointerOffset, bRIP);
             if (list != null && list.Count == 1)
             {
                 targetAddress = list[0] + targetSignatureOffset;
@@ -351,19 +353,22 @@ namespace RainbowMage.OverlayPlugin.EventSources
             [FieldOffset(0xA8)]
             public Single PosZ;
 
-            [FieldOffset(0x1820)]
+            [FieldOffset(0xB0)]
+            public Single Rotation;
+
+            [FieldOffset(0x1800)]
             public uint TargetID;
 
-            [FieldOffset(0x18B8)]
+            [FieldOffset(0x1898)]
             public int CurrentHP;
 
-            [FieldOffset(0x18BC)]
+            [FieldOffset(0x189C)]
             public int MaxHP;
 
-            [FieldOffset(0x18F4)]
+            [FieldOffset(0x18D4)]
             public byte Job;
 
-            [FieldOffset(0x1978)]
+            [FieldOffset(0x1958)]
             public fixed byte Effects[effectBytes];
         }
 
